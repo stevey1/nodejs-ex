@@ -1,35 +1,34 @@
-
-
 <!-- toc -->
 
 - [Node.js sample app on OpenShift!](#nodejs-sample-app-on-openshift)
-  * [OpenShift Origin v3 setup](#openshift-origin-v3-setup)
-    + [Running a virtual machine with Vagrant](#running-a-virtual-machine-with-vagrant)
-    + [Running a virtual machine managed by minishift](#running-a-virtual-machine-managed-by-minishift)
-    + [Starting a Docker container](#starting-a-docker-container)
-    + [Downloading the Binary](#downloading-the-binary)
-    + [Running an Ansible playbook](#running-an-ansible-playbook)
-  * [Creating a project](#creating-a-project)
-  * [Creating new apps](#creating-new-apps)
-    + [Create a new app from source code (method 1)](#create-a-new-app-from-source-code-method-1)
-    + [Create a new app from a template (method 2)](#create-a-new-app-from-a-template-method-2)
-    + [Build the app](#build-the-app)
-    + [Deploy the app](#deploy-the-app)
-    + [Configure routing](#configure-routing)
-    + [Create a new app from an image (method 3)](#create-a-new-app-from-an-image-method-3)
-    + [Setting environment variables](#setting-environment-variables)
-    + [Success](#success)
-    + [Pushing updates](#pushing-updates)
-  * [Debugging](#debugging)
-  * [Web UI](#web-ui)
-  * [Looking for help](#looking-for-help)
-  * [Compatibility](#compatibility)
-  * [License](#license)
+  - [OpenShift Origin v3 setup](#openshift-origin-v3-setup)
+    - [Running a virtual machine with Vagrant](#running-a-virtual-machine-with-vagrant)
+    - [Running a virtual machine managed by minishift](#running-a-virtual-machine-managed-by-minishift)
+    - [Starting a Docker container](#starting-a-docker-container)
+    - [Downloading the Binary](#downloading-the-binary)
+    - [Running an Ansible playbook](#running-an-ansible-playbook)
+  - [Creating a project](#creating-a-project)
+  - [Creating new apps](#creating-new-apps)
+    - [Create a new app from source code (method 1)](#create-a-new-app-from-source-code-method-1)
+    - [Create a new app from a template (method 2)](#create-a-new-app-from-a-template-method-2)
+    - [Build the app](#build-the-app)
+    - [Deploy the app](#deploy-the-app)
+    - [Configure routing](#configure-routing)
+    - [Create a new app from an image (method 3)](#create-a-new-app-from-an-image-method-3)
+    - [Setting environment variables](#setting-environment-variables)
+    - [Success](#success)
+    - [Pushing updates](#pushing-updates)
+  - [Debugging](#debugging)
+  - [Web UI](#web-ui)
+  - [Looking for help](#looking-for-help)
+  - [Compatibility](#compatibility)
+  - [License](#license)
 
 <!-- tocstop -->
 
 ## Node.js sample app on OpenShift!
------------------
+
+---
 
 This example will serve a welcome page and the current hit count as stored in a database.
 
@@ -37,11 +36,11 @@ This example will serve a welcome page and the current hit count as stored in a 
 
 There are four methods to get started with OpenShift v3:
 
-  - Running a virtual machine with Vagrant
-  - Running a virtual machine managed by minishift
-  - Starting a Docker container
-  - Downloading the binary
-  - Running an Ansible playbook
+- Running a virtual machine with Vagrant
+- Running a virtual machine managed by minishift
+- Starting a Docker container
+- Downloading the binary
+- Running an Ansible playbook
 
 #### Running a virtual machine with Vagrant
 
@@ -63,7 +62,6 @@ Red Hat periodically publishes OpenShift Origin Server binaries for Linux, which
 
 Outlined as the [Advanced Installation](https://docs.okd.io/latest/install_config/install/advanced_install.html) method for production environments, OpenShift Origin is also installable via Ansible playbook made available on the GitHub [openshift-ansible](https://github.com/openshift/openshift-ansible) repo.
 
-
 ### Creating a project
 
 After logging in with `oc login` (default username/password: openshift), if you don't have a project setup all ready, go ahead and take care of that:
@@ -71,13 +69,13 @@ After logging in with `oc login` (default username/password: openshift), if you 
         $ oc new-project nodejs-echo \
         --display-name="nodejs" --description="Sample Node.js app"
 
-That's it, project has been created.  Though it would probably be good to set your current project to this (thought new-project does it automatically as well), such as:
+That's it, project has been created. Though it would probably be good to set your current project to this (thought new-project does it automatically as well), such as:
 
         $ oc project nodejs-echo
 
 ### Creating new apps
 
-You can create a new OpenShift application using the web console or by running the `oc new-app` command from the CLI. With the  OpenShift CLI there are three ways to create a new application, by specifying either:
+You can create a new OpenShift application using the web console or by running the `oc new-app` command from the CLI. With the OpenShift CLI there are three ways to create a new application, by specifying either:
 
 - [source code](https://docs.openshift.com/enterprise/3.0/dev_guide/new_app.html#specifying-source-code)
 - [OpenShift templates](https://docs.openshift.com/enterprise/3.0/dev_guide/new_app.html#specifying-a-template)
@@ -87,7 +85,7 @@ You can create a new OpenShift application using the web console or by running t
 
 Pointing `oc new-app` at source code kicks off a chain of events, for our example run:
 
-        $ oc new-app https://github.com/sclorg/nodejs-ex -l name=myapp
+        $ oc new-app https://github.com/stevey1/nodejs-ex -l name=myapp
 
 The tool will inspect the source code, locate an appropriate image on DockerHub, create an ImageStream for that image, and then create the right build configuration, deployment configuration and service definition.
 
@@ -95,25 +93,25 @@ The tool will inspect the source code, locate an appropriate image on DockerHub,
 
 #### Create a new app from a template (method 2)
 
-We can also [create new apps using OpenShift template files](https://docs.openshift.com/enterprise/3.0/dev_guide/new_app.html#specifying-a-template). Clone the demo app source code from [GitHub repo](https://github.com/sclorg/nodejs-ex) (fork if you like).
+We can also [create new apps using OpenShift template files](https://docs.openshift.com/enterprise/3.0/dev_guide/new_app.html#specifying-a-template). Clone the demo app source code from [GitHub repo](https://github.com/stevey1/nodejs-ex) (fork if you like).
 
-        $ git clone https://github.com/sclorg/nodejs-ex
+        $ git clone https://github.com/stevey1/nodejs-ex
 
 Looking at the repo, you'll notice three files in the openshift/template directory:
 
-	nodejs-ex
-	├── openshift
-	│   └── templates
-	│       ├── nodejs.json
-	│       ├── nodejs-mongodb.json
-	│       └── nodejs-mongodb-persistent.json
-	├── package.json
-	├── README.md
-	├── server.js
-	├── tests
-	│   └── app_test.js
-	└── views
-	    └── index.html
+    nodejs-ex
+    ├── openshift
+    │   └── templates
+    │       ├── nodejs.json
+    │       ├── nodejs-mongodb.json
+    │       └── nodejs-mongodb-persistent.json
+    ├── package.json
+    ├── README.md
+    ├── server.js
+    ├── tests
+    │   └── app_test.js
+    └── views
+        └── index.html
 
 We can create the the new app from the `nodejs.json` template by using the `-f` flag and pointing the tool at a path to the template file:
 
@@ -133,7 +131,7 @@ Which should return something like:
 
         svc/nodejs-ex - 172.30.108.183:8080
           dc/nodejs-ex deploys istag/nodejs-ex:latest <-
-            bc/nodejs-ex builds https://github.com/sclorg/nodejs-ex with openshift/nodejs:0.10
+            bc/nodejs-ex builds https://github.com/stevey1/nodejs-ex with openshift/nodejs:0.10
               build #1 running for 7 seconds
             deployment #1 waiting on image or update
 
@@ -143,11 +141,11 @@ If the build is not yet started (you can check by running `oc get builds`), star
 
         $ oc start-build nodejs-ex --follow
 
-You can alternatively leave off `--follow` and use `oc logs build/nodejs-ex-n` where *n* is the number of the build to track the output of the build.
+You can alternatively leave off `--follow` and use `oc logs build/nodejs-ex-n` where _n_ is the number of the build to track the output of the build.
 
 #### Deploy the app
 
-Deployment happens automatically once the new application image is available.  To monitor its status either watch the web console or execute `oc get pods` to see when the pod is up.  Another helpful command is
+Deployment happens automatically once the new application image is available. To monitor its status either watch the web console or execute `oc get pods` to see when the pod is up. Another helpful command is
 
         $ oc get svc
 
@@ -166,7 +164,7 @@ That aside, let's explore our new web console, which for our example is running 
 
 After logging into the web console with your same CLI `oc login` credentials, click on the project we just created, then click `Create route`.
 
-If you're running OpenShift on a local machine, you can preview the new app by setting the Hostname to a localhost like: *10.2.2.2*.
+If you're running OpenShift on a local machine, you can preview the new app by setting the Hostname to a localhost like: _10.2.2.2_.
 
 This could also be accomplished by running:
 
@@ -180,24 +178,24 @@ You may have noticed the index page "Page view count" reads "No database configu
 
         $ oc new-app centos/mongodb-26-centos7 \
           -e MONGODB_USER=admin \
-	  -e MONGODB_DATABASE=mongo_db \
-	  -e MONGODB_PASSWORD=secret \
-	  -e MONGODB_ADMIN_PASSWORD=super-secret
+      -e MONGODB_DATABASE=mongo_db \
+      -e MONGODB_PASSWORD=secret \
+      -e MONGODB_ADMIN_PASSWORD=super-secret
 
 The `-e` flag sets the environment variables we want used in the configuration of our new app.
 
 Running `oc status` or checking the web console will reveal the address of the newly created MongoDB:
 
-	In project nodejs-echo on server https://10.2.2.2:8443
+    In project nodejs-echo on server https://10.2.2.2:8443
 
-	svc/mongodb-26-centos7 - 172.30.0.112:27017
-	  dc/mongodb-26-centos7 deploys istag/mongodb-26-centos7:latest
-	    deployment #1 running for 43 seconds - 1 pod
+    svc/mongodb-26-centos7 - 172.30.0.112:27017
+      dc/mongodb-26-centos7 deploys istag/mongodb-26-centos7:latest
+        deployment #1 running for 43 seconds - 1 pod
 
-	http://10.2.2.2 to pod port 8080-tcp (svc/nodejs-ex)
-	  dc/nodejs-ex deploys istag/nodejs-ex:latest <-
-	    bc/nodejs-ex builds https://github.com/sclorg/nodejs-ex with openshift/nodejs:0.10
-	    deployment #1 deployed 14 minutes ago - 1 pod
+    http://10.2.2.2 to pod port 8080-tcp (svc/nodejs-ex)
+      dc/nodejs-ex deploys istag/nodejs-ex:latest <-
+        bc/nodejs-ex builds https://github.com/stevey1/nodejs-ex with openshift/nodejs:0.10
+        deployment #1 deployed 14 minutes ago - 1 pod
 
 Note that the url for our new Mongo instance, for our example, is `172.30.0.112:27017`, yours will likely differ.
 
@@ -211,17 +209,17 @@ We need to add the environment variable `MONGO_URL` to our Node.js web app so th
 
 Then check `oc status` to see that an updated deployment has been kicked off:
 
-	In project nodejs-echo on server https://10.2.2.2:8443
+    In project nodejs-echo on server https://10.2.2.2:8443
 
-	svc/mongodb-26-centos7 - 172.30.0.112:27017
-	  dc/mongodb-26-centos7 deploys istag/mongodb-26-centos7:latest
-	    deployment #1 deployed 2 hours ago - 1 pod
+    svc/mongodb-26-centos7 - 172.30.0.112:27017
+      dc/mongodb-26-centos7 deploys istag/mongodb-26-centos7:latest
+        deployment #1 deployed 2 hours ago - 1 pod
 
-	http://10.2.2.2 to pod port 8080-tcp (svc/nodejs-ex)
-	  dc/nodejs-ex deploys istag/nodejs-ex:latest <-
-	    bc/nodejs-ex builds https://github.com/sclorg/nodejs-ex with openshift/nodejs:0.10
-	    deployment #2 deployed about a minute ago - 1 pod
-	    deployment #1 deployed 2 hours ago
+    http://10.2.2.2 to pod port 8080-tcp (svc/nodejs-ex)
+      dc/nodejs-ex deploys istag/nodejs-ex:latest <-
+        bc/nodejs-ex builds https://github.com/stevey1/nodejs-ex with openshift/nodejs:0.10
+        deployment #2 deployed about a minute ago - 1 pod
+        deployment #1 deployed 2 hours ago
 
 #### Success
 
